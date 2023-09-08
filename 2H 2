@@ -1,0 +1,35 @@
+from math import inf
+def FindAllKmers(dna_string, k):
+  kmers_list = []
+  i = 0
+  while i + k - 1 <= len(dna_string) - 1:
+    kmers_list.append(dna_string[i:i+k])
+    i = i + 1
+  return kmers_list
+
+def HammingDistance(first_string, second_string):
+  hamming_distance = 0
+  for i in range(min(len(first_string),len(second_string))):
+    if first_string[i] != second_string[i]:
+      hamming_distance = hamming_distance + 1
+  return hamming_distance + abs(len(first_string) - len(second_string))
+
+def DistanceBetweenPatternAndStrings(dna, pattern):
+  distance = 0
+  for dna_string in dna:
+    minimum_distance = inf
+    for kmer in FindAllKmers(dna_string, len(pattern)):
+      if HammingDistance(kmer, pattern) < minimum_distance:
+        minimum_distance = HammingDistance(kmer, pattern)
+    distance = distance + minimum_distance
+  return distance
+
+with open("C:/Users/1/Downloads/rosalind_ba2h (3).txt") as task_file:
+  task_arguments = [line.rstrip() for line in task_file]
+pattern = task_arguments[0]
+dna = task_arguments[1:len(task_arguments)][0]
+dna = dna.split(' ')
+
+f = open("task_resultt.txt", "w")
+f.write(str(DistanceBetweenPatternAndStrings(dna, pattern)))
+f.close()
